@@ -43,8 +43,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { ref, onMounted, computed } from 'vue'
 
 // Props
 const props = defineProps({
@@ -69,13 +68,61 @@ const salesByVintage = ref([])
 const inventoryByLocation = ref({})
 
 // Methods
+const getWineById = (id) => {
+  return props.wines.find(wine => wine.id === id)
+}
+
+const getWineName = (id) => {
+  const wine = getWineById(id)
+  return wine ? wine.name : 'Unknown'
+}
+
+const getWineVintage = (id) => {
+  const wine = getWineById(id)
+  return wine ? wine.vintage_year : ''
+}
+
+const getWineProducer = (id) => {
+  const wine = getWineById(id)
+  return wine ? wine.producer : ''
+}
+
 const fetchSalesByVintage = async () => {
   try {
     loading.value = true
-    const response = await axios.get('/api/reports/sales-by-vintage')
-    salesByVintage.value = response.data
+    
+    // Создаем отчет по продажам по винтажам на основе имеющихся данных
+    const salesReportMap = {}
+    
+    props.sales.forEach(sale => {
+      const wine = getWineById(sale.wine_id)
+      if (wine) {
+        const key = `${wine.id}-${wine.vintage_year}`
+        
+        if (!salesReportMap[key]) {
+          salesReportMap[key] = {
+            wine_id: wine.id,
+            wine_name: wine.name,
+            vintage_year: wine.vintage_year,
+            bottles_sold: 0,
+            glasses_sold: 0,
+            total_revenue: 0
+          }
+        }
+        
+        if (sale.product_type === 'bottle') {
+          salesReportMap[key].bottles_sold += sale.quantity
+        } else if (sale.product_type === 'glass') {
+          salesReportMap[key].glasses_sold += sale.quantity
+        }
+        
+        salesReportMap[key].total_revenue += sale.total_amount
+      }
+    })
+    
+    salesByVintage.value = Object.values(salesReportMap)
   } catch (error) {
-    console.error('Error fetching sales by vintage:', error)
+    console.error('Error generating sales report:', error)
   } finally {
     loading.value = false
   }
@@ -84,10 +131,30 @@ const fetchSalesByVintage = async () => {
 const fetchInventoryByLocation = async () => {
   try {
     loading.value = true
-    const response = await axios.get('/api/reports/inventory-by-location')
-    inventoryByLocation.value = response.data
+    
+    // Группируем инвентарь по локациям
+    const locationMap = {}
+    
+    props.inventory.forEach(item => {
+      const wine = getWineById(item.wine_id)
+      if (wine && item.location) {
+        if (!locationMap[item.location]) {
+          locationMap[item.location] = []
+        }
+        
+        locationMap[item.location].push({
+          ...item,
+          wine_name: wine.name,
+          vintage_year: wine.vintage_year,
+          producer: wine.producer,
+          glasses_available: item.bottles_count * wine.glasses_per_bottle
+        })
+      }
+    })
+    
+    inventoryByLocation.value = locationMap
   } catch (error) {
-    console.error('Error fetching inventory by location:', error)
+    console.error('Error generating inventory report:', error)
   } finally {
     loading.value = false
   }
@@ -110,6 +177,8 @@ onMounted(() => {
   background: white;
   padding: 20px;
   border-radius: 4px;
+  height: calc(100vh - 120px); /* компенсируем высоту заголовка и отступов */
+  overflow: auto;
 }
 
 .view-header {
@@ -118,5 +187,10 @@ onMounted(() => {
 
 .el-table {
   margin-top: 10px;
+}
+
+/* Добавляем отступы для вкладок */
+:deep(.el-tabs__content) {
+  padding: 20px 0;
 }
 </style>
