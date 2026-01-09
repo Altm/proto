@@ -16,7 +16,7 @@
             <span>Dashboard</span>
           </el-menu-item>
           <el-menu-item index="wines">
-            <el-icon><Glass /></el-icon>
+            <el-icon><List /></el-icon>
             <span>Wines</span>
           </el-menu-item>
           <el-menu-item index="inventory">
@@ -103,7 +103,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { House, Glass, Box, Money, Document, Fold, Expand } from '@element-plus/icons-vue'
+import { House, List, Box, Money, Document, Fold, Expand } from '@element-plus/icons-vue'
 import axios from 'axios'
 import WinesView from './components/WinesView.vue'
 import InventoryView from './components/InventoryView.vue'
@@ -134,9 +134,9 @@ const handleMenuSelect = (index) => {
 const fetchData = async () => {
   try {
     const [winesRes, inventoryRes, salesRes] = await Promise.all([
-      axios.get('http://localhost:8000/wines'),
-      axios.get('http://localhost:8000/inventory'),
-      axios.get('http://localhost:8000/sales')
+      axios.get('/api/wines'),
+      axios.get('/api/inventory'),
+      axios.get('/api/sales')
     ])
     
     wines.value = winesRes.data
