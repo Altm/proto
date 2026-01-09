@@ -134,9 +134,9 @@ const handleMenuSelect = (index) => {
 const fetchData = async () => {
   try {
     const [winesRes, inventoryRes, salesRes] = await Promise.all([
-      axios.get('http://localhost:8000/wines'),
-      axios.get('http://localhost:8000/inventory'),
-      axios.get('http://localhost:8000/sales')
+      axios.get('/api/wines'),
+      axios.get('/api/inventory'),
+      axios.get('/api/sales')
     ])
     
     wines.value = winesRes.data

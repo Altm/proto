@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: wine-admin-backend-prod
+    ports:
+      - "8000:8000"
+    environment:
+      - BACKEND_URL=${BACKEND_URL:-https://yourdomain.com/api}
+      - FRONTEND_URL=${FRONTEND_URL:-https://yourdomain.com}
+      - ENV=PROD
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: wine-admin-frontend-prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=${BACKEND_URL:-https://yourdomain.com/api}
+      - FRONTEND_URL=${FRONTEND_URL:-https://yourdomain.com}
+    env_file:
+      - .env
+    restart: unless-stopped

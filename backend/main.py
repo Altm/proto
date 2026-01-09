@@ -5,13 +5,20 @@ from typing import List, Optional
 import uuid
 from datetime import datetime
 from enum import Enum
+import os
 
-app = FastAPI(title="Wine Admin Panel API", version="1.0.0")
+# Determine debug mode based on environment variable
+DEBUG_MODE = os.getenv("ENV", "DEV").upper() == "DEV"
+
+app = FastAPI(title="Wine Admin Panel API", version="1.0.0", debug=DEBUG_MODE)
+
+# Get allowed origins from environment variable
+FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify exact origins
+    allow_origins=[FRONTEND_URL] if FRONTEND_URL != "*" else ["*"],  # In production, specify exact origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
