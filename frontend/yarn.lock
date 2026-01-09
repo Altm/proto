@@ -1,0 +1,3 @@
+# This file is used to lock dependency versions in yarn
+# It was created to indicate that this project uses yarn instead of npm
+# Run 'yarn install' to install dependencies based on package.json

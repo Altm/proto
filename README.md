@@ -42,6 +42,8 @@ This is a prototype for a wine administration panel built with FastAPI (backend)
 
 ### Frontend Setup
 
+> **Note:** This project uses Yarn as the package manager instead of npm.
+
 1. Navigate to the frontend directory:
    ```bash
    cd /workspace/frontend
@@ -49,12 +51,12 @@ This is a prototype for a wine administration panel built with FastAPI (backend)
 
 2. Install Node.js dependencies:
    ```bash
-   npm install
+   yarn install
    ```
 
 3. Start the Vue development server:
    ```bash
-   npm run dev
+   yarn dev
    ```
 
 ## API Endpoints
