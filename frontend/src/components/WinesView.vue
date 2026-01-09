@@ -251,6 +251,8 @@ const resetForm = () => {
   background: white;
   padding: 20px;
   border-radius: 4px;
+  height: calc(100vh - 120px);
+  overflow: auto;
 }
 
 .view-header {
