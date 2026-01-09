@@ -16,7 +16,7 @@
             <span>Dashboard</span>
           </el-menu-item>
           <el-menu-item index="wines">
-            <el-icon><Bottle /></el-icon>
+            <el-icon><List /></el-icon>
             <span>Wines</span>
           </el-menu-item>
           <el-menu-item index="inventory">
@@ -103,7 +103,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { House, Bottle, Box, Money, Document, Fold, Expand } from '@element-plus/icons-vue'
+import { House, List, Box, Money, Document, Fold, Expand } from '@element-plus/icons-vue'
 import axios from 'axios'
 import WinesView from './components/WinesView.vue'
 import InventoryView from './components/InventoryView.vue'
