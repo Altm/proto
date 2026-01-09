@@ -89,7 +89,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import axios from 'axios'
+import { apiService } from '../api/apiService.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // Props
@@ -163,7 +163,7 @@ const wineRules = {
 const createWine = async () => {
   try {
     loading.value = true
-    await axios.post('/api/wines', wineForm)
+    await apiService.createWine(wineForm)
     ElMessage.success('Wine created successfully')
     showCreateForm.value = false
     resetForm()
@@ -179,7 +179,7 @@ const createWine = async () => {
 const updateWine = async () => {
   try {
     loading.value = true
-    await axios.put(`/api/wines/${currentWineId.value}`, wineForm)
+    await apiService.updateWine(currentWineId.value, wineForm)
     ElMessage.success('Wine updated successfully')
     showCreateForm.value = false
     resetForm()
@@ -200,7 +200,7 @@ const deleteWine = async (id) => {
       type: 'warning'
     })
     
-    await axios.delete(`/api/wines/${id}`)
+    await apiService.deleteWine(id)
     ElMessage.success('Wine deleted successfully')
     emit('refresh')
   } catch (error) {

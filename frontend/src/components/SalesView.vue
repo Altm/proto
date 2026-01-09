@@ -78,7 +78,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import axios from 'axios'
+import { apiService } from '../api/apiService.js'
 import { ElMessage } from 'element-plus'
 
 // Props
@@ -129,7 +129,7 @@ const saleRules = {
 const recordSale = async () => {
   try {
     loading.value = true
-    await axios.post('/api/sales', saleForm)
+    await apiService.createSale(saleForm)
     ElMessage.success('Sale recorded successfully')
     showCreateForm.value = false
     resetForm()

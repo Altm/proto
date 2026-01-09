@@ -49,7 +49,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
+import { apiService } from '../api/apiService.js'
 import { ElMessage } from 'element-plus'
 
 // Props
@@ -111,7 +111,7 @@ const adjustInventory = async (inventoryItem) => {
 const confirmAdjust = async () => {
   try {
     loading.value = true
-    await axios.put(`/api/inventory/${selectedInventory.value.wine_id}`, {
+    await apiService.updateInventory(selectedInventory.value.wine_id, {
       bottles_count: adjustForm.value.bottles_count
     })
     ElMessage.success('Inventory adjusted successfully')
