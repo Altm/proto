@@ -129,7 +129,7 @@ const saleRules = {
 const recordSale = async () => {
   try {
     loading.value = true
-    await axios.post('http://localhost:8000/sales', saleForm)
+    await axios.post('/api/sales', saleForm)
     ElMessage.success('Sale recorded successfully')
     showCreateForm.value = false
     resetForm()

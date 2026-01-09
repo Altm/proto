@@ -72,7 +72,7 @@ const inventoryByLocation = ref({})
 const fetchSalesByVintage = async () => {
   try {
     loading.value = true
-    const response = await axios.get('http://localhost:8000/reports/sales-by-vintage')
+    const response = await axios.get('/api/reports/sales-by-vintage')
     salesByVintage.value = response.data
   } catch (error) {
     console.error('Error fetching sales by vintage:', error)
@@ -84,7 +84,7 @@ const fetchSalesByVintage = async () => {
 const fetchInventoryByLocation = async () => {
   try {
     loading.value = true
-    const response = await axios.get('http://localhost:8000/reports/inventory-by-location')
+    const response = await axios.get('/api/reports/inventory-by-location')
     inventoryByLocation.value = response.data
   } catch (error) {
     console.error('Error fetching inventory by location:', error)
